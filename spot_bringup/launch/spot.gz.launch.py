@@ -27,6 +27,13 @@ def generate_launch_description():
         description='Open RViz.'
     )
 
+    remappings = [
+        ("/tf", "tf"),
+        ("/tf_static", "tf_static"),       
+        ("/odom", "odom"),
+        ("/joint_states", "/spot/joint_states")
+    ]
+
     # Setup to launch the simulator and Gazebo world
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
     pkg_spot_gz = get_package_share_directory('spot_gz')
@@ -42,20 +49,19 @@ def generate_launch_description():
                     ])                  
                 ],
             }.items(),
-    )
+    )    
 
-    
-
-    # Bridge ROS topics and Gazebo messages for establishing communication
     pkg_spot_bringup = get_package_share_directory('spot_bringup')
     bridge = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
         output='screen',
-        parameters=[{
-            'config_file': os.path.join(pkg_spot_bringup, 'config', 'spot_bridge.yaml'),
-            'qos_overrides./tf_static.publisher.durability': 'transient_local',
-        }]
+        # LOS ARCHIVOS YAML SE PASAN COMO ARGUMENTOS, NO COMO PARÁMETROS
+        arguments=[
+            '--ros-args', 
+            '-p', 
+            f'config_file:={os.path.join(pkg_spot_bringup, "config", "spot_bridge.yaml")}'
+        ]
     )
 
     # Takes the description and joint angles as inputs and publishes the 3D poses of the robot links
@@ -72,10 +78,12 @@ def generate_launch_description():
             {'robot_description': robot_desc},
             {"publish_frequency": 200.0},
         ],
-        remappings=[
-            ('/joint_states', '/spot/joint_states')
-        ]
+        # remappings=[
+        #     ('/joint_states', '/spot/joint_states')
+        # ]
+        remappings=remappings
     )
+    
 
     # Controller
     config_path = get_package_share_directory("champ_config")

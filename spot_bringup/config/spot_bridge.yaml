@@ -9,11 +9,48 @@
   ros_type_name: "sensor_msgs/msg/JointState"
   gz_type_name: "gz.msgs.Model"
   direction: GZ_TO_ROS
-- ros_topic_name: "/spot/odometry"
+
+# Cam2
+- ros_topic_name: "/kinect/points"
+  gz_topic_name: "/kinect/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/kinect/image"
+  gz_topic_name: "/kinect/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/kinect/camera_info"
+  gz_topic_name: "/kinect/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+
+# Puente para la Odometría (Datos)
+- ros_topic_name: "/odom"
   gz_topic_name: "/model/spot/odometry"
   ros_type_name: "nav_msgs/msg/Odometry"
   gz_type_name: "gz.msgs.Odometry"
   direction: GZ_TO_ROS
+
+# Puente para las Transformaciones (Marcos de referencia)
+# Puente para las Transformaciones (Marcos de referencia)
+- ros_topic_name: "/tf"
+  gz_topic_name: "/model/spot/tf"
+  ros_type_name: "tf2_msgs/msg/TFMessage"
+  gz_type_name: "gz.msgs.Pose_V"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/tf_static"
+  gz_topic_name: "/model/spot/tf_static"
+  ros_type_name: "tf2_msgs/msg/TFMessage"
+  gz_type_name: "gz.msgs.Pose_V"
+  direction: GZ_TO_ROS
+
+
 # Controller
 - ros_topic_name: "/spot/joint_trajectory"
   gz_topic_name: "/model/spot/joint_trajectory"
